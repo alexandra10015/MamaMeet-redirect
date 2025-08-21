@@ -1,48 +1,42 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>MamaMeet Redirect</title>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MamaMeet Redirect</title>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5KYKR8WMJP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5KYKR8WMJP');
-    </script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5KYKR8WMJP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5KYKR8WMJP');
 
-    <script>
-      function redirect() {
-        const ua = navigator.userAgent || navigator.vendor || window.opera;
-        let target = "https://mamameet.app"; // fallback
-
-        if (/android/i.test(ua)) {
-          target = "https://play.google.com/store/apps/details?id=app.mamameet.net";
-        } else if (/iPad|iPhone|iPod/.test(ua)) {
-          target = "https://apps.apple.com/mt/app/mamameet-find-mum-friends/id6747424447";
-        }
-
-        // Skicka custom event till GA4
-        gtag('event', 'redirect_click', {
-          'event_category': 'engagement',
-          'event_label': target
-        });
-
-        // Vänta 1.5 sek innan redirect så GA4 hinner logga
-        setTimeout(() => {
-          window.location.href = target;
-        }, 1500);
-      }
-
-      window.onload = redirect;
-    </script>
-  </head>
-  <body>
-    <p>Redirecting you to MamaMeet app…</p>
-  </body>
+    // log click event before redirect
+    function trackAndRedirect(url) {
+      gtag('event', 'redirect_click', {
+        'event_category': 'Redirect',
+        'event_label': url,
+        'transport_type': 'beacon'
+      });
+      setTimeout(function(){ window.location.href = url; }, 300);
+    }
+  </script>
+</head>
+<body>
+<script>
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  if (/android/i.test(ua)) {
+    trackAndRedirect("https://play.google.com/store/apps/details?id=app.mamameet.net&hl=en_AU");
+  } else if (/iPad|iPhone|iPod/.test(ua)) {
+    trackAndRedirect("https://apps.apple.com/mt/app/mamameet-find-mum-friends/id6747424447");
+  } else {
+    trackAndRedirect("https://mamameet.app"); // fallback
+  }
+</script>
+</body>
 </html>
+
 
 
 
