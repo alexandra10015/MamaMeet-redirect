@@ -16,15 +16,21 @@
     <script>
       function redirect() {
         const ua = navigator.userAgent || navigator.vendor || window.opera;
-        let target = "https://yourdomain.com/fallback";
+        let target = "https://mamameet.app"; // fallback
 
         if (/android/i.test(ua)) {
-          target = "https://play.google.com/store/apps/details?id=YOUR_ANDROID_PACKAGE";
+          target = "https://play.google.com/store/apps/details?id=app.mamameet.net";
         } else if (/iPad|iPhone|iPod/.test(ua)) {
-          target = "https://apps.apple.com/app/idYOUR_APPLE_ID";
+          target = "https://apps.apple.com/mt/app/mamameet-find-mum-friends/id6747424447";
         }
 
-        // 👇 Delay redirect by 1.5s so GA4 can fire
+        // Skicka custom event till GA4
+        gtag('event', 'redirect_click', {
+          'event_category': 'engagement',
+          'event_label': target
+        });
+
+        // Vänta 1.5 sek innan redirect så GA4 hinner logga
         setTimeout(() => {
           window.location.href = target;
         }, 1500);
@@ -34,9 +40,10 @@
     </script>
   </head>
   <body>
-    <p>Redirecting you to the app…</p>
+    <p>Redirecting you to MamaMeet app…</p>
   </body>
 </html>
+
 
 
 
