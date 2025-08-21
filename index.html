@@ -1,79 +1,42 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MamaMeet — Get the App</title>
+  <head>
+    <meta charset="utf-8">
+    <title>MamaMeet Redirect</title>
 
-  <!-- Keep this page out of search engines -->
-  <meta name="robots" content="noindex,follow" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9DB4PHK5LB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9DB4PHK5LB');
+    </script>
 
-  <!-- Google Analytics (Web stream) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9DB4PHK5LB"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-9DB4PHK5LB');
-  </script>
+    <script>
+      function redirect() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        let target = "https://yourdomain.com/fallback";
 
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 24px; }
-    a { text-decoration: none; }
-    .buttons a { display: inline-block; padding: 10px 14px; border: 1px solid #ccc; border-radius: 8px; margin-right: 10px; }
-    .muted { color: #666; font-size: 0.95rem; margin-top: 6px; }
-  </style>
-</head>
-<body>
-  <h1>Redirecting you to the right app store…</h1>
-  <p class="muted">If you’re not redirected automatically, choose your store below:</p>
-  <div class="buttons">
-    <a href="https://play.google.com/store/apps/details?id=app.mamameet.net" rel="noopener">Google Play</a>
-    <a href="https://apps.apple.com/app/id6747424447" rel="noopener">App Store</a>
-  </div>
-  <p class="muted">Tip: If opened inside Instagram/Facebook, tap the menu and “Open in browser.”</p>
+        if (/android/i.test(ua)) {
+          target = "https://play.google.com/store/apps/details?id=YOUR_ANDROID_PACKAGE";
+        } else if (/iPad|iPhone|iPod/.test(ua)) {
+          target = "https://apps.apple.com/app/idYOUR_APPLE_ID";
+        }
 
-  <script>
-  (function () {
-    // Debug switch: add ?noredirect=1 to the URL to stay on this page
-    var params = new URLSearchParams(window.location.search);
-    var noRedirect = params.get('noredirect') === '1';
-
-    function detectTargetUrl() {
-      var ua = navigator.userAgent || navigator.vendor || window.opera;
-      var isAndroid = /android/i.test(ua);
-      var isiOS =
-        /iPad|iPhone|iPod/.test(ua) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-      if (isAndroid) {
-        return "https://play.google.com/store/apps/details?id=app.mamameet.net";
-      } else if (isiOS) {
-        return "https://apps.apple.com/app/id6747424447";
+        // 👇 Delay redirect by 1.5s so GA4 can fire
+        setTimeout(() => {
+          window.location.href = target;
+        }, 1500);
       }
-      return "https://mamameet.app"; // desktop fallback
-    }
 
-    function go() {
-      if (noRedirect) return; // stay here for testing
-      var target = detectTargetUrl();
-      setTimeout(function () {
-        window.location.replace(target);
-      }, 1000); // 1s delay so GA has time to fire
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", go);
-    } else {
-      go();
-    }
-  })();
-  </script>
-
-  <noscript>
-    <p>JavaScript is required for automatic redirect. Please use the buttons above.</p>
-  </noscript>
-</body>
+      window.onload = redirect;
+    </script>
+  </head>
+  <body>
+    <p>Redirecting you to the app…</p>
+  </body>
 </html>
+
 
 
