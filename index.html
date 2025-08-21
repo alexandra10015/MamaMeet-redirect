@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MamaMeet — Get the App</title>
+
+<!-- Visible text while redirecting (and good fallback content) -->
+<h1>Redirecting you to the right app store…</h1>
+<p>If nothing happens, choose one:</p>
+<p>
+  <a href="https://play.google.com/store/apps/details?id=app.mamameet.net">Google Play</a> |
+  <a href="https://apps.apple.com/app/id6747424447">App Store</a>
+</p>
+
+<script>
+(function () {
+  function go() {
+    var ua = navigator.userAgent || navigator.vendor || window.opera;
+    var isAndroid = /android/i.test(ua);
+    var isiOS =
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); // iPadOS
+
+    if (isAndroid) {
+      window.location.replace("https://play.google.com/store/apps/details?id=app.mamameet.net");
+    } else if (isiOS) {
+      window.location.replace("https://apps.apple.com/app/id6747424447");
+    } else {
+      // Fallback (desktop/unknown). Change if you prefer another page:
+      window.location.replace("https://mamameet.app");
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", go);
+  } else {
+    go();
+  }
+})();
+</script>
+
+<noscript>
+  <p>JavaScript is required for automatic redirect. Please use the links above.</p>
+</noscript>
+</html>
