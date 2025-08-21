@@ -1,56 +1,39 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MamaMeet — Get the App</title>
+<script>
+(function () {
+  // Helper: check for ?noredirect=1 in the URL
+  var params = new URLSearchParams(window.location.search);
+  var noRedirect = params.get('noredirect') === '1';
 
-  <!-- Google Analytics (Web stream) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9DB4PHK5LB"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-9DB4PHK5LB');
-  </script>
-</head>
-<body>
-  <h1>Redirecting you to the right app store…</h1>
-  <p>If nothing happens, choose one:</p>
-  <p>
-    <a href="https://play.google.com/store/apps/details?id=app.mamameet.net">Google Play</a> |
-    <a href="https://apps.apple.com/app/id6747424447">App Store</a>
-  </p>
+  function detectTargetUrl() {
+    var ua = navigator.userAgent || navigator.vendor || window.opera;
+    var isAndroid = /android/i.test(ua);
+    var isiOS =
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); // iPadOS
 
-  <script>
-  (function () {
-    function go() {
-      var ua = navigator.userAgent || navigator.vendor || window.opera;
-      var isAndroid = /android/i.test(ua);
-      var isiOS =
-        /iPad|iPhone|iPod/.test(ua) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); // iPadOS
-
-      if (isAndroid) {
-        window.location.replace("https://play.google.com/store/apps/details?id=app.mamameet.net");
-      } else if (isiOS) {
-        window.location.replace("https://apps.apple.com/app/id6747424447");
-      } else {
-        // Fallback (desktop/unknown)
-        window.location.replace("https://mamameet.app");
-      }
+    if (isAndroid) {
+      return "https://play.google.com/store/apps/details?id=app.mamameet.net";
+    } else if (isiOS) {
+      return "https://apps.apple.com/app/id6747424447";
     }
+    return "https://mamameet.app"; // desktop/unknown
+  }
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", go);
-    } else {
-      go();
-    }
-  })();
-  </script>
+  function go() {
+    if (noRedirect) return; // stay on page for testing
+    var target = detectTargetUrl();
 
-  <noscript>
-    <p>JavaScript is required for automatic redirect. Please use the links above.</p>
-  </noscript>
-</body>
-</html>
+    // Give GA a moment to load & send the hit before leaving
+    setTimeout(function () {
+      window.location.replace(target);
+    }, 1200);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", go);
+  } else {
+    go();
+  }
+})();
+</script>
+
